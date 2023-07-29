@@ -12,13 +12,15 @@ namespace API.Controllers
 	[ApiController]
 	public class MemberValuesController : ControllerBase
 	{
-		private readonly ILogger<MemberValuesController> _logger;
+		private readonly AccountContext _db;
 		private readonly IConfiguration _configuration;
+		private readonly ILogger<MemberValuesController> _logger;
 
-		public MemberValuesController(ILogger<MemberValuesController> logger, IConfiguration configuration)
+		public MemberValuesController(IConfiguration configuration, AccountContext db, ILogger<MemberValuesController> logger)
 		{
-			_logger = logger;
 			_configuration = configuration;
+			_db = db;
+			_logger = logger;
 		}
 
 		/*[HttpGet]
@@ -37,11 +39,8 @@ namespace API.Controllers
 		{
 			try
 			{
-				using (AccountContext db = new AccountContext())
-				{
-					db.Members.Add(member);
-					await db.SaveChangesAsync();
-				}
+				_db.Members.Add(member);
+				await _db.SaveChangesAsync();
 
 				return Ok();
 			}

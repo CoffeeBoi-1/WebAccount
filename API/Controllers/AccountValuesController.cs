@@ -54,11 +54,8 @@ namespace API.Controllers
 		{
 			try
 			{
-				using (AccountContext db = new AccountContext())
-				{
-					db.Accounts.Add(account);
-					await db.SaveChangesAsync();
-				}
+				_db.Accounts.Add(account);
+				await _db.SaveChangesAsync();
 
 				return Ok();
 			}
@@ -74,21 +71,19 @@ namespace API.Controllers
 		{
 			try
 			{
-				using (AccountContext db = new AccountContext())
+
+				AccountModel account = _db.Accounts.Where(c => c.Id == accountId).FirstOrDefault();
+				MemberModel member = _db.Members.Where(c => c.Id == memberId).FirstOrDefault();
+				MemberAccountRelation relation = new MemberAccountRelation()
 				{
-					AccountModel account = db.Accounts.Where(c => c.Id == accountId).FirstOrDefault();
-					MemberModel member = db.Members.Where(c => c.Id == memberId).FirstOrDefault();
-					MemberAccountRelation relation = new MemberAccountRelation()
-					{
-						AccountId = account.Id,
-						MemberId = member.Id
-					};
+					AccountId = account.Id,
+					MemberId = member.Id
+				};
 
-					account.AccountRelations.Add(relation);
-					member.MemberRelations.Add(relation);
+				account.AccountRelations.Add(relation);
+				member.MemberRelations.Add(relation);
 
-					await db.SaveChangesAsync();
-				}
+				await _db.SaveChangesAsync();
 
 				return Ok();
 			}
@@ -104,12 +99,9 @@ namespace API.Controllers
 		{
 			try
 			{
-				using (AccountContext db = new AccountContext())
-				{
-					AccountModel accountToDelete = db.Accounts.FirstOrDefault(a => a.Id == Id);
-					db.Accounts.Remove(accountToDelete);
-					await db.SaveChangesAsync();
-				}
+				AccountModel accountToDelete = _db.Accounts.FirstOrDefault(a => a.Id == Id);
+				_db.Accounts.Remove(accountToDelete);
+				await _db.SaveChangesAsync();
 
 				return Ok();
 			}
