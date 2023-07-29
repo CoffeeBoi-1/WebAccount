@@ -1,11 +1,9 @@
 ﻿using API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -14,25 +12,45 @@ namespace API.Controllers
 	[ApiController]
 	public class AccountValuesController : ControllerBase
 	{
+		private readonly IConfiguration _configuration;
+		private readonly AccountContext _db;
 		private readonly ILogger<AccountValuesController> _logger;
 
-		public AccountValuesController(ILogger<AccountValuesController> logger)
+		public AccountValuesController(IConfiguration configuration, AccountContext db, ILogger<AccountValuesController> logger)
 		{
 			_logger = logger;
+			_configuration = configuration;
+			_db = db;
 		}
 
 		[HttpGet]
-		public IActionResult Get()
+		public IActionResult Get(int pageNumber)
 		{
-			using (AccountContext db = new AccountContext())
+			try
 			{
-				return new ObjectResult(db.Accounts.ToArray());
+				int pageSize = _configuration.GetValue<int>("PageSize");
+
+				int totalPages = (int)Math.Ceiling((double)_db.Accounts.Count() / pageSize);
+				totalPages = Math.Clamp(totalPages, 1, pageSize);
+				pageNumber = Math.Clamp(pageNumber, 1, totalPages);
+				int itemsToSkip = (pageNumber - 1) * pageSize;
+
+				IQueryable<AccountModel> query = _db.Accounts
+					.OrderBy(e => e.Id)
+					.Skip(itemsToSkip)
+					.Take(pageSize);
+
+				return new ObjectResult(query);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
 			}
 		}
 
 		[Route("[action]")]
 		[HttpPost]
-		public async Task<IActionResult> AddAccount(AccountModel account)
+		public async Task<IActionResult> CreateAccount(AccountModel account)
 		{
 			try
 			{
@@ -80,6 +98,7 @@ namespace API.Controllers
 			}
 		}
 
+		[Route("[action]")]
 		[HttpDelete]
 		public async Task<IActionResult> DeleteAccount(int Id)
 		{

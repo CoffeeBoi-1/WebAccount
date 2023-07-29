@@ -33,7 +33,7 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpPost]
-		public async Task<IActionResult> AddMember(MemberModel member)
+		public async Task<IActionResult> CreateMember(MemberModel member)
 		{
 			try
 			{

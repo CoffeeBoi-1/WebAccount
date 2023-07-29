@@ -29,6 +29,8 @@ namespace API
 			{
 				db.Database.Migrate();
 			}
+
+			services.AddDbContext<AccountContext>();
 		}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
