@@ -154,7 +154,6 @@ namespace API.Controllers
 		{
 			try
 			{
-
 				AccountModel account = _db.Accounts.Where(c => c.Id == accountId).FirstOrDefault();
 				MemberModel member = _db.Members.Where(c => c.Id == memberId).FirstOrDefault();
 				MemberAccountRelation relation = new MemberAccountRelation()
@@ -165,6 +164,45 @@ namespace API.Controllers
 
 				account.AccountRelations.Add(relation);
 				member.MemberRelations.Add(relation);
+
+				await _db.SaveChangesAsync();
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
+			}
+		}
+
+		[Route("[action]")]
+		[HttpPost]
+		public async Task<IActionResult> UpdateAccount(AccountUpdateModel update)
+		{
+			try
+			{
+				AccountModel account = _db.Accounts.FirstOrDefault(a => a.Id == update.Id);
+
+				if (update.StartDate != null)
+				{
+					if (update.StartDate.Value >= account.EndDate) throw new Exception("Дата начала должна быть меньше даты окончания");
+
+					account.StartDate = update.StartDate.Value;
+				}
+
+				if (update.EndDate != null)
+				{
+					if (update.EndDate.Value <= account.StartDate) throw new Exception("Дата окончания должна быть больше даты начала");
+
+					account.EndDate = update.EndDate.Value;
+				}
+
+				if (update.RoomArea != null)
+				{
+					if (update.RoomArea.Value <= 0) throw new Exception("Площадь должна быть больше нуля");
+
+					account.RoomArea = update.RoomArea.Value;
+				}
 
 				await _db.SaveChangesAsync();
 
