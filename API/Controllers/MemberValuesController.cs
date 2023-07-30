@@ -23,23 +23,35 @@ namespace API.Controllers
 			_logger = logger;
 		}
 
-		/*[HttpGet]
-		public IActionResult Get(int? Id)
-		{
-			using (AccountContext db = new AccountContext())
-			{
-				if (Id == null) return new ObjectResult(db.Members.ToArray());
-				else return new ObjectResult(db.Members.Where(c => c.Id == Id).FirstOrDefault());
-			}
-		}*/
-
 		[Route("[action]")]
 		[HttpPost]
 		public async Task<IActionResult> CreateMember(MemberModel member)
 		{
 			try
 			{
+				member.Surename = member.Surename.ToLower();
+				member.Name = member.Name.ToLower();
+				member.Patronymic = member.Patronymic.ToLower();
+
 				_db.Members.Add(member);
+				await _db.SaveChangesAsync();
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
+			}
+		}
+
+		[Route("[action]")]
+		[HttpDelete]
+		public async Task<IActionResult> DeleteMember(int Id)
+		{
+			try
+			{
+				MemberModel memberToDelete = _db.Members.Where(a => a.Id == Id).FirstOrDefault();
+				_db.Members.Remove(memberToDelete);
 				await _db.SaveChangesAsync();
 
 				return Ok();

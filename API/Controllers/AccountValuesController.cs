@@ -1,10 +1,16 @@
-﻿using API.Models;
+﻿using API.BaseClasses;
+using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace API.Controllers
 {
@@ -44,7 +50,62 @@ namespace API.Controllers
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
+				return StatusCode(500, $"Ошибка при выполнении запроса: {ex.Message}");
+			}
+		}
+
+		[Route("[action]")]
+		[HttpGet]
+		public IActionResult GetDetailed(int Id)
+		{
+			try
+			{
+				AccountModel account = _db.Accounts.SingleOrDefault(a => a.Id == Id);
+				AddressModel address = _db.Addresses.SingleOrDefault(a => a.Id == Id);
+				List<MemberModel> members = _db.MemberAccountRelations
+					.Where(rel => rel.AccountId == Id)
+					.Select(rel => rel.Member)
+					.ToList();
+
+				AccountDetailedModel detailedAccount = new AccountDetailedModel(account) { Members = members, Address = address };
+
+				return new ObjectResult(detailedAccount);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при выполнении запроса: {ex.Message}");
+			}
+		}
+
+		[Route("[action]")]
+		[HttpPost]
+		public IActionResult GetFiltered(FilterModel filter)
+		{
+			try
+			{
+				IQueryable<AccountModel> accounts = _db.Accounts;
+				FilterService filterService = new FilterService(filter, accounts);
+
+				if (filter.IsNotEmptyMembers)
+				{
+					filterService.FilterByNotEmptyMembers();
+
+					if (filter.Surename != null) filterService.FilterBySureaname();
+
+					if (filter.Name != null) filterService.FilterByName();
+
+					if (filter.Patronymic != null) filterService.FilterByPatronymic();
+				}
+
+				if (filter.CertainDate != null) filterService.FilterByCertainDate();
+
+				if (filter.Address != null) filterService.FilterByAddress(_db.Addresses);
+
+				return new ObjectResult(filterService.GetAccounts().ToList());
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при выполнении запроса: {ex.Message}");
 			}
 		}
 
@@ -54,7 +115,29 @@ namespace API.Controllers
 		{
 			try
 			{
+				account.Address.Street = account.Address.Street.ToLower();
+				account.Address.House = account.Address.House.ToLower();
+				account.Address.Apartment = account.Address.Apartment.ToLower();
+
 				_db.Accounts.Add(account);
+				await _db.SaveChangesAsync();
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
+			}
+		}
+
+		[Route("[action]")]
+		[HttpDelete]
+		public async Task<IActionResult> DeleteAccount(int Id)
+		{
+			try
+			{
+				AccountModel accountToDelete = _db.Accounts.Where(a => a.Id == Id).FirstOrDefault();
+				_db.Accounts.Remove(accountToDelete);
 				await _db.SaveChangesAsync();
 
 				return Ok();
@@ -83,24 +166,6 @@ namespace API.Controllers
 				account.AccountRelations.Add(relation);
 				member.MemberRelations.Add(relation);
 
-				await _db.SaveChangesAsync();
-
-				return Ok();
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, $"Ошибка при сохранении данных: {ex.Message}");
-			}
-		}
-
-		[Route("[action]")]
-		[HttpDelete]
-		public async Task<IActionResult> DeleteAccount(int Id)
-		{
-			try
-			{
-				AccountModel accountToDelete = _db.Accounts.FirstOrDefault(a => a.Id == Id);
-				_db.Accounts.Remove(accountToDelete);
 				await _db.SaveChangesAsync();
 
 				return Ok();

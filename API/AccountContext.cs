@@ -9,6 +9,7 @@ namespace API
 		public DbSet<AccountModel> Accounts { get; set; }
 		public DbSet<MemberModel> Members { get; set; }
 		public DbSet<MemberAccountRelation> MemberAccountRelations { get; set; }
+		public DbSet<AddressModel> Addresses { get; set; }
 
 		public AccountContext()
 		{
@@ -34,6 +35,11 @@ namespace API
 				.HasOne(cpr => cpr.Member)
 				.WithMany(c => c.MemberRelations)
 				.HasForeignKey(cpr => cpr.MemberId);
+
+			modelBuilder.Entity<AccountModel>()
+					.HasOne(account => account.Address)
+					.WithOne(address => address.Account)
+					.HasForeignKey<AccountModel>(account => account.AddressId);
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
