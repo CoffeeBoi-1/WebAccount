@@ -21,6 +21,8 @@ namespace Front
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //Hardcode. Instead Docker
+                    webBuilder.UseUrls("https://localhost:5002;http://localhost:5004");
                 });
     }
 }

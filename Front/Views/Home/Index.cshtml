@@ -1,8 +1,28 @@
-﻿@{
+﻿@model IEnumerable<Front.BaseClasses.AccountBase>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <table class="table">
+        <tdead>
+            <tr>
+                <th>Номер Аккаунта</th>
+                <th>Дата открытия</th>
+                <th>Дата закрытия</th>
+
+            </tr>
+        </tdead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AccountNumber </td>
+                    <td>@item.StartDate.ToString("dd MMM yyyy")</td>
+                    <td>@item.EndDate.ToString("dd MMM yyyy")</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

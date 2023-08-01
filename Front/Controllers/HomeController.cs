@@ -1,10 +1,11 @@
-﻿using Front.Models;
+﻿using Front.BaseClasses;
+using Front.Models;
+using Front.Services;
+using Front.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Front.Controllers
@@ -12,20 +13,18 @@ namespace Front.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AccountService _service;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IAccountService service, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _service = (AccountService)service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            IEnumerable<AccountBase> accounts = await _service.GetAccounts(1);
+            return View(accounts);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

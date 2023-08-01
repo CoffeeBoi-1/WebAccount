@@ -2,14 +2,10 @@ using Front.Services.Interfaces;
 using Front.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Front
 {
@@ -25,7 +21,7 @@ namespace Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddHttpClient<IWeatherForecastService, WeatherForecastService>(c => c.BaseAddress = new Uri("https://localhost:44351/"));
+            services.AddHttpClient<IAccountService, AccountService>(c => c.BaseAddress = new Uri("http://localhost:5000/"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

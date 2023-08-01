@@ -233,7 +233,7 @@
   var VERSION = '4.3.1';
   var DATA_KEY = 'bs.alert';
   var EVENT_KEY = "." + DATA_KEY;
-  var DATA_API_KEY = '.data-api';
+  var DATA_Front_KEY = '.data-api';
   var JQUERY_NO_CONFLICT = $.fn[NAME];
   var Selector = {
     DISMISS: '[data-dismiss="alert"]'
@@ -241,7 +241,7 @@
   var Event = {
     CLOSE: "close" + EVENT_KEY,
     CLOSED: "closed" + EVENT_KEY,
-    CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+    CLICK_DATA_Front: "click" + EVENT_KEY + DATA_Front_KEY
   };
   var ClassName = {
     ALERT: 'alert',
@@ -373,7 +373,7 @@
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DISMISS, Alert._handleDismiss(new Alert()));
+  $(document).on(Event.CLICK_DATA_Front, Selector.DISMISS, Alert._handleDismiss(new Alert()));
   /**
    * ------------------------------------------------------------------------
    * jQuery
@@ -398,7 +398,7 @@
   var VERSION$1 = '4.3.1';
   var DATA_KEY$1 = 'bs.button';
   var EVENT_KEY$1 = "." + DATA_KEY$1;
-  var DATA_API_KEY$1 = '.data-api';
+  var DATA_Front_KEY$1 = '.data-api';
   var JQUERY_NO_CONFLICT$1 = $.fn[NAME$1];
   var ClassName$1 = {
     ACTIVE: 'active',
@@ -413,8 +413,8 @@
     BUTTON: '.btn'
   };
   var Event$1 = {
-    CLICK_DATA_API: "click" + EVENT_KEY$1 + DATA_API_KEY$1,
-    FOCUS_BLUR_DATA_API: "focus" + EVENT_KEY$1 + DATA_API_KEY$1 + " " + ("blur" + EVENT_KEY$1 + DATA_API_KEY$1)
+    CLICK_DATA_Front: "click" + EVENT_KEY$1 + DATA_Front_KEY$1,
+    FOCUS_BLUR_DATA_Front: "focus" + EVENT_KEY$1 + DATA_Front_KEY$1 + " " + ("blur" + EVENT_KEY$1 + DATA_Front_KEY$1)
     /**
      * ------------------------------------------------------------------------
      * Class Definition
@@ -515,7 +515,7 @@
    */
 
 
-  $(document).on(Event$1.CLICK_DATA_API, Selector$1.DATA_TOGGLE_CARROT, function (event) {
+  $(document).on(Event$1.CLICK_DATA_Front, Selector$1.DATA_TOGGLE_CARROT, function (event) {
     event.preventDefault();
     var button = event.target;
 
@@ -524,7 +524,7 @@
     }
 
     Button._jQueryInterface.call($(button), 'toggle');
-  }).on(Event$1.FOCUS_BLUR_DATA_API, Selector$1.DATA_TOGGLE_CARROT, function (event) {
+  }).on(Event$1.FOCUS_BLUR_DATA_Front, Selector$1.DATA_TOGGLE_CARROT, function (event) {
     var button = $(event.target).closest(Selector$1.BUTTON)[0];
     $(button).toggleClass(ClassName$1.FOCUS, /^focus(in)?$/.test(event.type));
   });
@@ -552,7 +552,7 @@
   var VERSION$2 = '4.3.1';
   var DATA_KEY$2 = 'bs.carousel';
   var EVENT_KEY$2 = "." + DATA_KEY$2;
-  var DATA_API_KEY$2 = '.data-api';
+  var DATA_Front_KEY$2 = '.data-api';
   var JQUERY_NO_CONFLICT$2 = $.fn[NAME$2];
   var ARROW_LEFT_KEYCODE = 37; // KeyboardEvent.which value for left arrow key
 
@@ -595,8 +595,8 @@
     POINTERDOWN: "pointerdown" + EVENT_KEY$2,
     POINTERUP: "pointerup" + EVENT_KEY$2,
     DRAG_START: "dragstart" + EVENT_KEY$2,
-    LOAD_DATA_API: "load" + EVENT_KEY$2 + DATA_API_KEY$2,
-    CLICK_DATA_API: "click" + EVENT_KEY$2 + DATA_API_KEY$2
+    LOAD_DATA_Front: "load" + EVENT_KEY$2 + DATA_Front_KEY$2,
+    CLICK_DATA_Front: "click" + EVENT_KEY$2 + DATA_Front_KEY$2
   };
   var ClassName$2 = {
     CAROUSEL: 'carousel',
@@ -1118,8 +1118,8 @@
    */
 
 
-  $(document).on(Event$2.CLICK_DATA_API, Selector$2.DATA_SLIDE, Carousel._dataApiClickHandler);
-  $(window).on(Event$2.LOAD_DATA_API, function () {
+  $(document).on(Event$2.CLICK_DATA_Front, Selector$2.DATA_SLIDE, Carousel._dataApiClickHandler);
+  $(window).on(Event$2.LOAD_DATA_Front, function () {
     var carousels = [].slice.call(document.querySelectorAll(Selector$2.DATA_RIDE));
 
     for (var i = 0, len = carousels.length; i < len; i++) {
@@ -1152,7 +1152,7 @@
   var VERSION$3 = '4.3.1';
   var DATA_KEY$3 = 'bs.collapse';
   var EVENT_KEY$3 = "." + DATA_KEY$3;
-  var DATA_API_KEY$3 = '.data-api';
+  var DATA_Front_KEY$3 = '.data-api';
   var JQUERY_NO_CONFLICT$3 = $.fn[NAME$3];
   var Default$1 = {
     toggle: true,
@@ -1167,7 +1167,7 @@
     SHOWN: "shown" + EVENT_KEY$3,
     HIDE: "hide" + EVENT_KEY$3,
     HIDDEN: "hidden" + EVENT_KEY$3,
-    CLICK_DATA_API: "click" + EVENT_KEY$3 + DATA_API_KEY$3
+    CLICK_DATA_Front: "click" + EVENT_KEY$3 + DATA_Front_KEY$3
   };
   var ClassName$3 = {
     SHOW: 'show',
@@ -1471,7 +1471,7 @@
    */
 
 
-  $(document).on(Event$3.CLICK_DATA_API, Selector$3.DATA_TOGGLE, function (event) {
+  $(document).on(Event$3.CLICK_DATA_Front, Selector$3.DATA_TOGGLE, function (event) {
     // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
     if (event.currentTarget.tagName === 'A') {
       event.preventDefault();
@@ -1512,7 +1512,7 @@
   var VERSION$4 = '4.3.1';
   var DATA_KEY$4 = 'bs.dropdown';
   var EVENT_KEY$4 = "." + DATA_KEY$4;
-  var DATA_API_KEY$4 = '.data-api';
+  var DATA_Front_KEY$4 = '.data-api';
   var JQUERY_NO_CONFLICT$4 = $.fn[NAME$4];
   var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
 
@@ -1533,9 +1533,9 @@
     SHOW: "show" + EVENT_KEY$4,
     SHOWN: "shown" + EVENT_KEY$4,
     CLICK: "click" + EVENT_KEY$4,
-    CLICK_DATA_API: "click" + EVENT_KEY$4 + DATA_API_KEY$4,
-    KEYDOWN_DATA_API: "keydown" + EVENT_KEY$4 + DATA_API_KEY$4,
-    KEYUP_DATA_API: "keyup" + EVENT_KEY$4 + DATA_API_KEY$4
+    CLICK_DATA_Front: "click" + EVENT_KEY$4 + DATA_Front_KEY$4,
+    KEYDOWN_DATA_Front: "keydown" + EVENT_KEY$4 + DATA_Front_KEY$4,
+    KEYUP_DATA_Front: "keyup" + EVENT_KEY$4 + DATA_Front_KEY$4
   };
   var ClassName$4 = {
     DISABLED: 'disabled',
@@ -2006,12 +2006,12 @@
    */
 
 
-  $(document).on(Event$4.KEYDOWN_DATA_API, Selector$4.DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(Event$4.KEYDOWN_DATA_API, Selector$4.MENU, Dropdown._dataApiKeydownHandler).on(Event$4.CLICK_DATA_API + " " + Event$4.KEYUP_DATA_API, Dropdown._clearMenus).on(Event$4.CLICK_DATA_API, Selector$4.DATA_TOGGLE, function (event) {
+  $(document).on(Event$4.KEYDOWN_DATA_Front, Selector$4.DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(Event$4.KEYDOWN_DATA_Front, Selector$4.MENU, Dropdown._dataApiKeydownHandler).on(Event$4.CLICK_DATA_Front + " " + Event$4.KEYUP_DATA_Front, Dropdown._clearMenus).on(Event$4.CLICK_DATA_Front, Selector$4.DATA_TOGGLE, function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     Dropdown._jQueryInterface.call($(this), 'toggle');
-  }).on(Event$4.CLICK_DATA_API, Selector$4.FORM_CHILD, function (e) {
+  }).on(Event$4.CLICK_DATA_Front, Selector$4.FORM_CHILD, function (e) {
     e.stopPropagation();
   });
   /**
@@ -2038,7 +2038,7 @@
   var VERSION$5 = '4.3.1';
   var DATA_KEY$5 = 'bs.modal';
   var EVENT_KEY$5 = "." + DATA_KEY$5;
-  var DATA_API_KEY$5 = '.data-api';
+  var DATA_Front_KEY$5 = '.data-api';
   var JQUERY_NO_CONFLICT$5 = $.fn[NAME$5];
   var ESCAPE_KEYCODE$1 = 27; // KeyboardEvent.which value for Escape (Esc) key
 
@@ -2065,7 +2065,7 @@
     KEYDOWN_DISMISS: "keydown.dismiss" + EVENT_KEY$5,
     MOUSEUP_DISMISS: "mouseup.dismiss" + EVENT_KEY$5,
     MOUSEDOWN_DISMISS: "mousedown.dismiss" + EVENT_KEY$5,
-    CLICK_DATA_API: "click" + EVENT_KEY$5 + DATA_API_KEY$5
+    CLICK_DATA_Front: "click" + EVENT_KEY$5 + DATA_Front_KEY$5
   };
   var ClassName$5 = {
     SCROLLABLE: 'modal-dialog-scrollable',
@@ -2210,9 +2210,9 @@
         return $(htmlElement).off(EVENT_KEY$5);
       });
       /**
-       * `document` has 2 events `Event.FOCUSIN` and `Event.CLICK_DATA_API`
+       * `document` has 2 events `Event.FOCUSIN` and `Event.CLICK_DATA_Front`
        * Do not move `document` in `htmlElements` array
-       * It will remove `Event.CLICK_DATA_API` event that should remain
+       * It will remove `Event.CLICK_DATA_Front` event that should remain
        */
 
       $(document).off(Event$5.FOCUSIN);
@@ -2565,7 +2565,7 @@
    */
 
 
-  $(document).on(Event$5.CLICK_DATA_API, Selector$5.DATA_TOGGLE, function (event) {
+  $(document).on(Event$5.CLICK_DATA_Front, Selector$5.DATA_TOGGLE, function (event) {
     var _this10 = this;
 
     var target;
@@ -3645,7 +3645,7 @@
   var VERSION$8 = '4.3.1';
   var DATA_KEY$8 = 'bs.scrollspy';
   var EVENT_KEY$8 = "." + DATA_KEY$8;
-  var DATA_API_KEY$6 = '.data-api';
+  var DATA_Front_KEY$6 = '.data-api';
   var JQUERY_NO_CONFLICT$8 = $.fn[NAME$8];
   var Default$6 = {
     offset: 10,
@@ -3660,7 +3660,7 @@
   var Event$8 = {
     ACTIVATE: "activate" + EVENT_KEY$8,
     SCROLL: "scroll" + EVENT_KEY$8,
-    LOAD_DATA_API: "load" + EVENT_KEY$8 + DATA_API_KEY$6
+    LOAD_DATA_Front: "load" + EVENT_KEY$8 + DATA_Front_KEY$6
   };
   var ClassName$8 = {
     DROPDOWN_ITEM: 'dropdown-item',
@@ -3918,7 +3918,7 @@
    */
 
 
-  $(window).on(Event$8.LOAD_DATA_API, function () {
+  $(window).on(Event$8.LOAD_DATA_Front, function () {
     var scrollSpys = [].slice.call(document.querySelectorAll(Selector$8.DATA_SPY));
     var scrollSpysLength = scrollSpys.length;
 
@@ -3952,14 +3952,14 @@
   var VERSION$9 = '4.3.1';
   var DATA_KEY$9 = 'bs.tab';
   var EVENT_KEY$9 = "." + DATA_KEY$9;
-  var DATA_API_KEY$7 = '.data-api';
+  var DATA_Front_KEY$7 = '.data-api';
   var JQUERY_NO_CONFLICT$9 = $.fn[NAME$9];
   var Event$9 = {
     HIDE: "hide" + EVENT_KEY$9,
     HIDDEN: "hidden" + EVENT_KEY$9,
     SHOW: "show" + EVENT_KEY$9,
     SHOWN: "shown" + EVENT_KEY$9,
-    CLICK_DATA_API: "click" + EVENT_KEY$9 + DATA_API_KEY$7
+    CLICK_DATA_Front: "click" + EVENT_KEY$9 + DATA_Front_KEY$7
   };
   var ClassName$9 = {
     DROPDOWN_MENU: 'dropdown-menu',
@@ -4158,7 +4158,7 @@
    */
 
 
-  $(document).on(Event$9.CLICK_DATA_API, Selector$9.DATA_TOGGLE, function (event) {
+  $(document).on(Event$9.CLICK_DATA_Front, Selector$9.DATA_TOGGLE, function (event) {
     event.preventDefault();
 
     Tab._jQueryInterface.call($(this), 'show');
