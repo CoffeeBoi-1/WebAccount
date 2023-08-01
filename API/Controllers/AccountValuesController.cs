@@ -30,7 +30,7 @@ namespace API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get(int pageNumber)
+		public IActionResult Get([FromQuery] int pageNumber)
 		{
 			try
 			{
@@ -56,7 +56,7 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpGet]
-		public IActionResult GetDetailed(int Id)
+		public IActionResult GetDetailed([FromQuery] int Id)
 		{
 			try
 			{
@@ -132,7 +132,7 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpDelete]
-		public async Task<IActionResult> DeleteAccount(int Id)
+		public async Task<IActionResult> DeleteAccount([FromQuery] int Id)
 		{
 			try
 			{
@@ -150,7 +150,7 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpPost]
-		public async Task<IActionResult> AddMember(int accountId, int memberId)
+		public async Task<IActionResult> AddMember([FromQuery] int accountId, [FromQuery] int memberId)
 		{
 			try
 			{
