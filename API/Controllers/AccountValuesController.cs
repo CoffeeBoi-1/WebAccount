@@ -79,10 +79,17 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpPost]
-		public IActionResult GetFiltered(FilterModel filter)
+		public IActionResult GetFiltered([FromQuery] int pageNumber, FilterModel filter)
 		{
 			try
 			{
+				int pageSize = _configuration.GetValue<int>("PageSize");
+
+				int totalPages = (int)Math.Ceiling((double)_db.Accounts.Count() / pageSize);
+				totalPages = Math.Clamp(totalPages, 1, pageSize);
+				pageNumber = Math.Clamp(pageNumber, 1, totalPages);
+				int itemsToSkip = (pageNumber - 1) * pageSize;
+
 				IQueryable<AccountModel> accounts = _db.Accounts;
 				FilterService filterService = new FilterService(filter, accounts);
 
@@ -99,9 +106,19 @@ namespace API.Controllers
 
 				if (filter.CertainDate != null) filterService.FilterByCertainDate();
 
-				if (filter.Address != null) filterService.FilterByAddress(_db.Addresses);
+				if (filter.Address != null) filterService.FilterByAddress();
 
-				return new ObjectResult(filterService.GetAccounts().ToList());
+				if (filter.RoomArea != null) filterService.FilterByRoomArea();
+
+				if (filter.AccountNumber != null) filterService.FilterByAccountNumber();
+
+				IQueryable<AccountModel> query = filterService.GetAccounts();
+
+				query = query.OrderBy(e => e.Id)
+					.Skip(itemsToSkip)
+					.Take(pageSize);
+
+				return new ObjectResult(query);
 			}
 			catch (Exception ex)
 			{

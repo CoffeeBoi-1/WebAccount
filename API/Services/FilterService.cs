@@ -49,7 +49,7 @@ namespace API.Services
 				.Where(account => account.StartDate == _filter.CertainDate);
 		}
 
-		public void FilterByAddress(IQueryable<AddressModel> addresses)
+		public void FilterByAddress()
 		{
 			string street = _filter.Address.Street.ToLower();
 			string house = _filter.Address.House.ToLower();
@@ -60,6 +60,18 @@ namespace API.Services
 				.Where(joined => joined.Address.Street.ToLower().Contains(street) &&
 							 joined.Address.House.ToLower().Contains(house) &&
 							 joined.Address.Apartment.ToLower().Contains(apartment));
+		}
+
+		public void FilterByRoomArea()
+		{
+			_accounts = _accounts
+				.Where(account => account.RoomArea == _filter.RoomArea);
+		}
+
+		public void FilterByAccountNumber()
+		{
+			_accounts = _accounts
+				.Where(account => account.AccountNumber == _filter.AccountNumber);
 		}
 
 		public IQueryable<AccountModel> GetAccounts()

@@ -12,5 +12,7 @@ namespace API.Models
 		public string Name { get; set; } = null;
 		public string Patronymic { get; set; } = null;
 		public AddressModel Address { get; set; } = null;
+		public float? RoomArea { get; set; } = null;
+		public string? AccountNumber { get; set; } = null;
 	}
 }
