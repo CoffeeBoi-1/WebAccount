@@ -1,0 +1,52 @@
+﻿@model AccountDetailedModel
+
+<h1>Account Details</h1>
+<table>
+    <tr>
+        <td>Id:</td>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <td>AccountNumber:</td>
+        <td>@Model.AccountNumber</td>
+    </tr>
+    <tr>
+        <td>StartDate:</td>
+        <td>@Model.StartDate</td>
+    </tr>
+    <tr>
+        <td>EndDate:</td>
+        <td>@Model.EndDate</td>
+    </tr>
+    <tr>
+        <td>Address:</td>
+        <td>@Model.Address.Street, @Model.Address.House, @Model.Address.Apartment</td>
+    </tr>
+    <tr>
+        <td>RoomArea:</td>
+        <td>@Model.RoomArea</td>
+    </tr>
+</table>
+
+<h2>Members:</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Patronymic</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model.Members)
+        {
+            <tr>
+                <td>@member.Id</td>
+                <td>@member.Surename</td>
+                <td>@member.Name</td>
+                <td>@member.Patronymic</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -7,14 +7,8 @@ namespace Front.Models
 	{
 		public List<MemberBase> Members { get; set; } = new List<MemberBase>();
 
-		public AccountDetailedModel(AccountBase account) 
-		{
-			this.Id = account.Id;
-			this.AccountNumber = account.AccountNumber;
-			this.StartDate = account.StartDate;
-			this.EndDate = account.EndDate;
-			this.Address = account.Address;
-			this.RoomArea = account.RoomArea;
-		}
+        public AccountDetailedModel()
+        {
+        }
 	}
 }

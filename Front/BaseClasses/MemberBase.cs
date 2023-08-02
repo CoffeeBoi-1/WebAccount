@@ -4,8 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace Front.BaseClasses
 {
-	public abstract class MemberBase
+	public class MemberBase
 	{
+		public MemberBase() { }
+
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), JsonIgnore]
 		public int Id { get; set; }
 

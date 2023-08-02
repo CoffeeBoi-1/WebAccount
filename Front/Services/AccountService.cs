@@ -14,7 +14,6 @@ namespace Front.Services
     public class AccountService : IAccountService
     {
         private readonly HttpClient _client;
-        public const string BasePath = "AccountValues";
 
         public AccountService(HttpClient client)
         {
@@ -23,16 +22,30 @@ namespace Front.Services
 
         public async Task<IEnumerable<AccountBase>> GetAccounts(int page)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, BasePath);
-            
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AccountPaths.BasePath);
+
             Dictionary<string, string> query = new Dictionary<string, string>
             {
-                { "pageNumber", "1" }
+                { "pageNumber", page.ToString }
             };
 
-            HttpResponseMessage response = await _client.GetAsync(QueryHelpers.AddQueryString(BasePath, query));
+            HttpResponseMessage response = await _client.GetAsync(QueryHelpers.AddQueryString(AccountPaths.BasePath, query));
 
             return await response.ReadContentAsync<List<AccountBase>>();
+        }
+
+        public async Task<AccountDetailedModel> GetDetailedAccount(int Id)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AccountPaths.GetDetailedAccountPath);
+
+            Dictionary<string, string> query = new Dictionary<string, string>
+            {
+                { "Id", Id.ToString() }
+            };
+
+            HttpResponseMessage response = await _client.GetAsync(QueryHelpers.AddQueryString(AccountPaths.GetDetailedAccountPath, query));
+
+            return await response.ReadContentAsync<AccountDetailedModel>();
         }
     }
 }
