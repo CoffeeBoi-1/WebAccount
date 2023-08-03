@@ -1,4 +1,4 @@
-﻿using Front.BaseClasses;
+﻿using AccountLibrary.Models;
 using Front.Models;
 using Front.Services;
 using Front.Services.Interfaces;
@@ -23,7 +23,7 @@ namespace Front.Controllers
 
 		public async Task<IActionResult> IndexAsync(int pageNumber, FilterModel filter)
 		{
-			IEnumerable<AccountBase> accounts = await _service.GetAccounts(pageNumber);
+			IEnumerable<AccountModel> accounts = await _service.GetAccounts(pageNumber);
 			return View(accounts);
 		}
 

@@ -3,11 +3,9 @@ using System.Net.Http;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Front.BaseClasses;
 using Front.Helpers;
-using Front.Models;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Collections;
+using AccountLibrary.Models;
 
 namespace Front.Services
 {
@@ -20,7 +18,7 @@ namespace Front.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<AccountBase>> GetAccounts(int page)
+        public async Task<IEnumerable<AccountModel>> GetAccounts(int page)
         {
             Dictionary<string, string> query = new Dictionary<string, string>
             {
@@ -29,7 +27,7 @@ namespace Front.Services
 
             HttpResponseMessage response = await _client.GetAsync(QueryHelpers.AddQueryString(AccountPaths.BasePath, query));
 
-            return await response.ReadContentAsync<List<AccountBase>>();
+            return await response.ReadContentAsync<List<AccountModel>>();
         }
 
         public async Task<AccountDetailedModel> GetDetailedAccount(int Id)

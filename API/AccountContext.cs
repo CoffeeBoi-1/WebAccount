@@ -1,6 +1,5 @@
-﻿using API.Models;
+﻿using AccountLibrary.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace API
 {

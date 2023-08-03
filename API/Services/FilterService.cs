@@ -1,7 +1,6 @@
-﻿using API.Models;
+﻿using AccountLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace API.Services
 {
