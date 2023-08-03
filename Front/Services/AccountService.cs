@@ -22,11 +22,9 @@ namespace Front.Services
 
         public async Task<IEnumerable<AccountBase>> GetAccounts(int page)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AccountPaths.BasePath);
-
             Dictionary<string, string> query = new Dictionary<string, string>
             {
-                { "pageNumber", page.ToString }
+                { "pageNumber", page.ToString() }
             };
 
             HttpResponseMessage response = await _client.GetAsync(QueryHelpers.AddQueryString(AccountPaths.BasePath, query));
@@ -36,8 +34,6 @@ namespace Front.Services
 
         public async Task<AccountDetailedModel> GetDetailedAccount(int Id)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AccountPaths.GetDetailedAccountPath);
-
             Dictionary<string, string> query = new Dictionary<string, string>
             {
                 { "Id", Id.ToString() }

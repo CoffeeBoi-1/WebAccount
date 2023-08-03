@@ -1,0 +1,58 @@
+﻿@model FilterModel
+
+<form class="form-check">
+	<input type='hidden' id="pageNumber" name="pageNumber" value=@(Context.Request.Query["pageNumber"].Count == 0 ? 1 : Context.Request.Query["pageNumber"]) />
+	<div class="form-row">
+		<div class="form-inline col-sm-6 col-md-3">
+			<label class="mr-2">IsNotEmptyMembers:</label>
+			<input asp-for="IsNotEmptyMembers" id="IsNotEmptyMembers" type="checkbox" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Surename:</label>
+			<input asp-for="Surename" id="Surename" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Name:</label>
+			<input asp-for="Name" id="Name" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Patronymic:</label>
+			<input asp-for="Patronymic" id="Patronymic" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Certain Date:</label>
+			<input asp-for="CertainDate" id="CertainDate" type="date" class="form-control" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Address Street:</label>
+			<input asp-for="Address.Street" class="form-control" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Address House:</label>
+			<input asp-for="Address.House" class="form-control" />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Address Apartment:</label>
+			<input asp-for="Address.Apartment" class="form-control" />
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary mx-2">Поиск</button>
+	<button type="submit" id="ClearBtn" class="btn btn-primary mx-2">Очистить</button>
+</form>
+
+<script>
+	var isNotEmptyMembersCheckbox = document.querySelector("#IsNotEmptyMembers");
+	var nameInput = document.querySelector("#Name");
+	var surenameInput = document.querySelector("#Surename");
+	var patronymicInput = document.querySelector("#Patronymic");
+
+	isNotEmptyMembersCheckbox.addEventListener("change", function () {
+		nameInput.disabled = !this.checked;
+		surenameInput.disabled = !this.checked;
+		patronymicInput.disabled = !this.checked;
+	});
+</script>
+
+

@@ -21,7 +21,7 @@ namespace Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddHttpClient<IAccountService, AccountService>(c => c.BaseAddress = new Uri("http://localhost:5000/"));
+            services.AddHttpClient<IAccountService, AccountService>(c => c.BaseAddress = new Uri("https://localhost:5001/"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,7 +46,7 @@ namespace Front
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
             });
         }
     }
