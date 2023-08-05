@@ -26,11 +26,11 @@ namespace API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get([FromQuery] int pageNumber)
+		public IActionResult Get([FromQuery] int pageNumber, [FromQuery] int pageSize = 10)
 		{
 			try
 			{
-				int pageSize = _configuration.GetValue<int>("PageSize");
+				pageSize = Math.Clamp(Math.Abs(pageSize), 1, 100);
 
 				int totalPages = (int)Math.Ceiling((double)_db.Accounts.Count() / pageSize);
 				totalPages = Math.Clamp(totalPages, 1, pageSize);
@@ -75,11 +75,11 @@ namespace API.Controllers
 
 		[Route("[action]")]
 		[HttpPost]
-		public IActionResult GetFiltered([FromQuery] int pageNumber, FilterModel filter)
+		public IActionResult GetFiltered([FromQuery] int pageNumber, FilterModel filter, [FromQuery] int pageSize = 10)
 		{
 			try
 			{
-				int pageSize = _configuration.GetValue<int>("PageSize");
+				pageSize = Math.Clamp(Math.Abs(pageSize), 1, 100);
 
 				int totalPages = (int)Math.Ceiling((double)_db.Accounts.Count() / pageSize);
 				totalPages = Math.Clamp(totalPages, 1, pageSize);

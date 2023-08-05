@@ -1,45 +1,67 @@
 ﻿@model AccountLibrary.Models.FilterModel
 
 <form class="form-check">
-	<input type='hidden' id="pageNumber" name="pageNumber" value=@(Context.Request.Query["pageNumber"].Count == 0 ? 1 : Context.Request.Query["pageNumber"]) />
 	<div class="form-row">
 		<div class="form-inline col-sm-6 col-md-3">
-			<label class="mr-2">IsNotEmptyMembers:</label>
-			<input asp-for="IsNotEmptyMembers" id="IsNotEmptyMembers" type="checkbox" />
+			<label class="mr-2">Только с жильцами</label>
+			<input name="IsNotEmptyMembers" id="IsNotEmptyMembers" type="checkbox" checked="@(Model.IsNotEmptyMembers)" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Surename:</label>
+			<label class="mr-2">Номер страницы</label>
+			<input name="pageNumber" id="pageNumber" type="number" min="1" class="form-control" value=@(string.IsNullOrEmpty(Context.Request.Query["pageNumber"]) ? 1 : int.Parse(Context.Request.Query["pageNumber"])) />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Размер страницы</label>
+			<input name="pageSize" id="pageSize" type="number" min="1" max="100" class="form-control" value=@(string.IsNullOrEmpty(Context.Request.Query["pagesize"]) ? 10 : int.Parse(Context.Request.Query["pageSize"])) />
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Фамилия</label>
 			<input asp-for="Surename" id="Surename" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Name:</label>
+			<label class="mr-2">Имя</label>
 			<input asp-for="Name" id="Name" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Patronymic:</label>
+			<label class="mr-2">Отчество</label>
 			<input asp-for="Patronymic" id="Patronymic" class="form-control" disabled="@(!Model.IsNotEmptyMembers)" />
 		</div>
 	</div>
 	<div class="form-row">
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Certain Date:</label>
+			<label class="mr-2">Определённая Дата</label>
 			<input asp-for="CertainDate" id="CertainDate" type="date" class="form-control" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Address Street:</label>
-			<input asp-for="Address.Street" class="form-control" />
+			<label class="mr-2">Площадь помещения</label>
+			<input asp-for="RoomArea" id="RoomArea" type="number" step="0.01" class="form-control" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Address House:</label>
-			<input asp-for="Address.House" class="form-control" />
+			<label class="mr-2">Номер ЛС</label>
+			<input asp-for="AccountNumber" id="AccountNumber" class="form-control" />
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Улица</label>
+			<input asp-for="Address.Street" id="Street" class="form-control" />
 		</div>
 		<div class="form-group col-sm-6 col-md-3">
-			<label class="mr-2">Address Apartment:</label>
-			<input asp-for="Address.Apartment" class="form-control" />
+			<label class="mr-2">Дом</label>
+			<input asp-for="Address.House" id="House" class="form-control" disabled=@(Model.Address.Street=="") required />
+		</div>
+		<div class="form-group col-sm-6 col-md-3">
+			<label class="mr-2">Квартира</label>
+			<input asp-for="Address.Apartment" id="Apartment" class="form-control" disabled=@(Model.Address.Street=="") />
 		</div>
 	</div>
 	<button type="submit" class="btn btn-primary mx-2">Поиск</button>
-	<button type="submit" id="ClearBtn" class="btn btn-primary mx-2">Очистить</button>
+	@if (true == true)
+	{
+		<button type="submit" class="btn btn-primary mx-2">Fs</button>
+	}
 </form>
 
 <script>
@@ -52,7 +74,30 @@
 		nameInput.disabled = !this.checked;
 		surenameInput.disabled = !this.checked;
 		patronymicInput.disabled = !this.checked;
+
+		if ($(this).is(':checked')) {
+			$(this).attr('value', 'true');
+		} else {
+			$(this).attr('value', 'false');
+		}
 	});
 </script>
 
+<script>
+	var streetInput = document.querySelector("#Street");
+	var houseInput = document.querySelector("#House");
+	var apartmentInput = document.querySelector("#Apartment");
 
+	streetInput.addEventListener("change", function () {
+		if(streetInput.value != "")
+		{
+			houseInput.disabled = false;
+			apartmentInput.disabled = false;
+		}
+		else
+		{
+			houseInput.disabled = true;
+			apartmentInput.disabled = true;
+		}
+	});
+</script>

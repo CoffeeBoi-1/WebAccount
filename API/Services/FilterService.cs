@@ -52,12 +52,12 @@ namespace API.Services
 		{
 			string street = _filter.Address.Street.ToLower();
 			string house = _filter.Address.House.ToLower();
-			string apartment = _filter.Address.Apartment.ToLower();
+			string apartment = string.IsNullOrEmpty(_filter.Address.Apartment) ? "" : _filter.Address.Apartment.ToLower();
 
 			_accounts = _accounts
 				.Include(account => account.Address)
 				.Where(joined => joined.Address.Street.ToLower().Contains(street) &&
-							 joined.Address.House.ToLower().Contains(house) &&
+							 joined.Address.House.ToLower() == house &&
 							 joined.Address.Apartment.ToLower().Contains(apartment));
 		}
 

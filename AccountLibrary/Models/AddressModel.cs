@@ -6,18 +6,17 @@ namespace AccountLibrary.Models
 	public class AddressModel
 	{
 		[JsonIgnore]
-		public int Id { get; set; }
+		public int? Id { get; set; }
 
 		[JsonIgnore]
-		public AccountModel Account { get; set; }
+		public AccountModel? Account { get; set; }
 
 		[Required]
-		public string Street { get; set; }
+		public string? Street { get; set; }
 
 		[Required]
-		public string House { get; set; }
-
-		[Required]
-		public string Apartment { get; set; }
+		public string? House { get; set; }
+		
+		public string? Apartment { get; set; }
 	}
 }

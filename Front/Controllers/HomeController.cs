@@ -4,6 +4,7 @@ using Front.Services;
 using Front.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -21,9 +22,10 @@ namespace Front.Controllers
 			_service = (AccountService)service;
 		}
 
-		public async Task<IActionResult> IndexAsync(int pageNumber, FilterModel filter)
+		public async Task<IActionResult> IndexAsync(int pageNumber, FilterModel filter, int pageSize = 10)
 		{
-			IEnumerable<AccountModel> accounts = await _service.GetAccounts(pageNumber);
+			IEnumerable<AccountModel> accounts = await _service.GetFilteredAccounts(pageNumber, pageSize, filter);
+
 			return View(accounts);
 		}
 

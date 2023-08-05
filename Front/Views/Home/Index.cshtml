@@ -6,30 +6,28 @@
 
 <div class="text-center">
 	@{
-		await Html.RenderPartialAsync("_SearchBar", new FilterModel());
-	}
-	<table class="table">
-		<tdead>
-			<tr>
-				<th>Номер Аккаунта</th>
-				<th>Дата открытия</th>
-				<th>Дата закрытия</th>
-				<th>Площадь</th>
-				<th></th>
-			</tr>
-		</tdead>
-		<tbody id="accountsTableBody">
-			@foreach (var item in Model)
+		AddressModel address = new AddressModel()
 			{
-				<tr>
-					<td>@item.AccountNumber</td>
-					<td>@item.StartDate.ToString("dd MMM yyyy")</td>
-					<td>@item.EndDate.ToString("dd MMM yyyy")</td>
-					<td>@item.RoomArea</td>
-					<td><a href="#">ПОДРОБНЕЕ</a></td>
-				</tr>
-			}
-		</tbody>
-	</table>
-	<button id="nextPageButton">Следующая страница</button>
+				Street = string.IsNullOrEmpty(Context.Request.Query["Address.Street"]) ? "" : Context.Request.Query["Address.Street"],
+				House = string.IsNullOrEmpty(Context.Request.Query["Address.House"]) ? "" : Context.Request.Query["Address.House"],
+				Apartment = string.IsNullOrEmpty(Context.Request.Query["Address.Apartment"]) ? "" : Context.Request.Query["Address.Apartment"]
+			};
+
+		FilterModel filter = new FilterModel()
+			{
+				IsNotEmptyMembers = string.IsNullOrEmpty(Context.Request.Query["isNotEmptyMembers"]) ? false : true,
+				CertainDate = string.IsNullOrEmpty(Context.Request.Query["certainDate"]) ? null : DateTime.Parse(Context.Request.Query["certainDate"]),
+				Address = address,
+				AccountNumber = string.IsNullOrEmpty(Context.Request.Query["accountNumber"]) ? "" : Context.Request.Query["accountNumber"],
+				Surename = string.IsNullOrEmpty(Context.Request.Query["surename"]) ? "" : Context.Request.Query["surename"],
+				Name = string.IsNullOrEmpty(Context.Request.Query["name"]) ? "" : Context.Request.Query["name"],
+				Patronymic = string.IsNullOrEmpty(Context.Request.Query["patronymic"]) ? "" : Context.Request.Query["patronymic"],
+				RoomArea = string.IsNullOrEmpty(Context.Request.Query["roomArea"]) ? null : float.Parse(Context.Request.Query["roomArea"]),
+			};
+
+		await Html.RenderPartialAsync("_SearchBar", filter);
+	}
+	@{
+		await Html.RenderPartialAsync("_AccountsTable", Model);
+	}
 </div>
