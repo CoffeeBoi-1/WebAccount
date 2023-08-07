@@ -4,6 +4,10 @@
 	ViewData["Title"] = "Список ЛС";
 }
 
+@{
+	await Html.RenderPartialAsync("_NewAccountModal", new AccountLibrary.Models.AccountModel());
+}
+
 <div class="text-center">
 	@{
 		AddressModel address = new AddressModel()
@@ -31,3 +35,68 @@
 		await Html.RenderPartialAsync("_AccountsTable", Model);
 	}
 </div>
+
+<script>
+	let canCreateAccount = true
+
+	$(document).ready(function () {
+		$('#AccountForm').submit(function (event) {
+			event.preventDefault();
+			if (!canCreateAccount) return
+
+			canCreateAccount = false
+
+			var accountNumber = $('input[name="AccountNumber"]').val();
+			var startDate = $('input[name="StartDate"]').val();
+			var endDate = $('input[name="EndDate"]').val();
+			var street = $('input[name="Address.Street"]').val();
+			var house = $('input[name="Address.House"]').val();
+			var apartment = $('input[name="Address.Apartment"]').val();
+			var roomArea = $('input[name="RoomArea"]').val();
+
+			var formData = {
+				AccountNumber: accountNumber,
+				startDate: startDate,
+				EndDate: endDate,
+				Address: {
+					Street: street,
+					House: house,
+					Apartment: apartment
+				},
+				RoomArea: roomArea
+			};
+
+			$.ajax({
+				url: 'CreateAccount',
+				method: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(formData),
+				success: function (data) {
+					$('#toastBody').text("Успешно!")
+					$(".toast").toast('show')
+
+					setTimeout(() => { location.reload() }, 1500);
+				},
+				error: function (error) {
+					var errors = JSON.parse(error.responseText).errors;
+					var errorSummary = "";
+					console.log(errors)
+					console.log(error)
+					for (var key in errors) {
+						if (Array.isArray(errors[key])) {
+							errorSummary += errors[key].join(", ") + "\n";
+						} else {
+							errorSummary += errors[key] + "\n";
+						}
+					}
+
+					$('#toastBody').text(errorSummary)
+
+					$(".toast").toast('show')
+
+					canCreateAccount = true
+				}
+			});
+		})
+	})
+</script>

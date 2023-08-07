@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -36,7 +37,7 @@ namespace API.Controllers
 				_db.Members.Add(member);
 				await _db.SaveChangesAsync();
 
-				return Ok();
+				return new ObjectResult(member.Id);
 			}
 			catch (Exception ex)
 			{
@@ -51,6 +52,9 @@ namespace API.Controllers
 			try
 			{
 				MemberModel memberToDelete = _db.Members.Where(a => a.Id == Id).FirstOrDefault();
+
+				if (memberToDelete == null) throw new Exception("Жилец не найден");
+
 				_db.Members.Remove(memberToDelete);
 				await _db.SaveChangesAsync();
 

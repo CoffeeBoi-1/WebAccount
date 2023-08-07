@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -150,6 +151,9 @@ namespace API.Controllers
 			try
 			{
 				AccountModel accountToDelete = _db.Accounts.Where(a => a.Id == Id).FirstOrDefault();
+
+				if (accountToDelete == null) throw new Exception("ЛС не найден");
+
 				_db.Accounts.Remove(accountToDelete);
 				await _db.SaveChangesAsync();
 
@@ -195,6 +199,8 @@ namespace API.Controllers
 			try
 			{
 				AccountModel account = _db.Accounts.FirstOrDefault(a => a.Id == update.Id);
+
+				if (account == null) throw new Exception("ЛС не найден");
 
 				if (update.StartDate != null)
 				{

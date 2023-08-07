@@ -22,7 +22,8 @@ namespace Front
         {
             services.AddControllersWithViews();
             services.AddHttpClient<IAccountService, AccountService>(c => c.BaseAddress = new Uri("https://localhost:5001/"));
-        }
+			services.AddHttpClient<IMemberService, MemberService>(c => c.BaseAddress = new Uri("https://localhost:5001/"));
+		}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

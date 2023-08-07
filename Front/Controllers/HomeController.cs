@@ -29,6 +29,13 @@ namespace Front.Controllers
 			return View(accounts);
 		}
 
+		[HttpPost]
+		[Route("CreateAccount")]
+		public async Task<IActionResult> CreateAccount([FromBody] AccountModel account)
+		{
+			return await _service.CreateAccount(account);
+		}
+
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{

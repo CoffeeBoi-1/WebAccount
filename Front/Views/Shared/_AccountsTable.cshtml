@@ -1,13 +1,12 @@
 ﻿@model IEnumerable<AccountLibrary.Models.AccountModel>
 
-<table class="table">
-	<tdead>
+<table class="table table-striped">
+	<tdead class="thead-dark">
 		<tr>
 			<th>Номер Аккаунта</th>
 			<th>Дата открытия</th>
-			<th>Дата закрытия</th>
 			<th>Площадь</th>
-			<th></th>
+			<th><button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#Modal">Добавить</button></th>
 		</tr>
 	</tdead>
 	<tbody id="accountsTableBody">
@@ -16,9 +15,8 @@
 			<tr>
 				<td>@item.AccountNumber</td>
 				<td>@item.StartDate.ToString("dd MMM yyyy")</td>
-				<td>@item.EndDate.ToString("dd MMM yyyy")</td>
 				<td>@item.RoomArea</td>
-				<td><a href="#">ПОДРОБНЕЕ</a></td>
+				<td><a class="btn btn-secondary mx-2" asp-controller="AccountDetailed" asp-action="Index" asp-route-id="@item.Id">ПОДРОБНЕЕ</a></td>
 			</tr>
 		}
 	</tbody>

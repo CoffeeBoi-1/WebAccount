@@ -1,52 +1,204 @@
 ﻿@model AccountLibrary.Models.AccountDetailedModel
 
-<h1>Account Details</h1>
-<table>
-    <tr>
-        <td>Id:</td>
-        <td>@Model.Id</td>
-    </tr>
-    <tr>
-        <td>AccountNumber:</td>
-        <td>@Model.AccountNumber</td>
-    </tr>
-    <tr>
-        <td>StartDate:</td>
-        <td>@Model.StartDate</td>
-    </tr>
-    <tr>
-        <td>EndDate:</td>
-        <td>@Model.EndDate</td>
-    </tr>
-    <tr>
-        <td>Address:</td>
-        <td>@Model.Address.Street, @Model.Address.House, @Model.Address.Apartment</td>
-    </tr>
-    <tr>
-        <td>RoomArea:</td>
-        <td>@Model.RoomArea</td>
-    </tr>
-</table>
+@{
+	await Html.RenderPartialAsync("_NewMemberModal", new AccountLibrary.Models.MemberModel());
+}
+
+<h1>Лицевой Счёт</h1>
+<form id="Form">
+	<input type="hidden" id="Id" asp-for="Id" value="@Model.Id" />
+
+	<table class="table" style="max-width:550px">
+		<tr>
+			<td>Id:</td>
+			<td>@Model.Id</td>
+		</tr>
+		<tr>
+			<td>Номер ЛС:</td>
+			<td>@Model.AccountNumber</td>
+		</tr>
+		<tr>
+			<td>Дата начала:</td>
+			<td><input asp-for="StartDate" id="StartDate" type="date" class="form-control" disabled /></td>
+			<td><button type="button" class="btn btn-primary mx-2" onclick="Edit('StartDate', this)">Изменить</button></td>
+		</tr>
+		<tr>
+			<td>Дата конца:</td>
+			<td><input asp-for="EndDate" id="EndDate" type="date" class="form-control" disabled /></td>
+			<td><button type="button" class="btn btn-primary mx-2" onclick="Edit('EndDate', this)">Изменить</button></td>
+		</tr>
+		<tr>
+			<td>Адрес:</td>
+			<td>@Model.Address.Street @Model.Address.House, @Model.Address.Apartment</td>
+		</tr>
+		<tr>
+			<td>Площадь помещения:</td>
+			<td><input asp-for="RoomArea" id="RoomArea" type="number" step="0.01" class="form-control" disabled /></td>
+			<td><button type="button" class="btn btn-primary mx-2" onclick="Edit('RoomArea', this)">Изменить</button></td>
+		</tr>
+	</table>
+	<button type="submit" id="SubmitBtn" class="btn btn-primary mx-2" disabled>Сохранить</button>
+</form>
+<button class="btn btn-danger mx-2" onclick="DeleteAccount()">Удалить ЛС</button>
 
 <h2>Members:</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Surname</th>
-            <th>Name</th>
-            <th>Patronymic</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var member in Model.Members)
-        {
-            <tr>
-                <td>@member.Id</td>
-                <td>@member.Surename</td>
-                <td>@member.Name</td>
-                <td>@member.Patronymic</td>
-            </tr>
-        }
-    </tbody>
+<table class="table table-striped">
+	<thead class="thead-dark">
+		<tr>
+			<th>Id</th>
+			<th>Фамилия</th>
+			<th>Имя</th>
+			<th>Отчество</th>
+			<th><button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#Modal">Добавить</button></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var member in Model.Members)
+		{
+			<tr>
+				<td>@member.Id</td>
+				<td>@member.Surename</td>
+				<td>@member.Name</td>
+				<td>@member.Patronymic</td>
+				<td><button type="button" class="btn btn-danger mx-2" onclick="DeleteMember(@member.Id)">Удалить</button></td>
+			</tr>
+		}
+	</tbody>
 </table>
+
+<script>
+	let canSendUpdate = true
+
+	$(document).ready(function () {
+		$('#Form').submit(function (event) {
+			event.preventDefault();
+			if (!canSendUpdate) return
+
+			canSendUpdate = false
+
+			var id = $('input[name="Id"]').val();
+			var roomArea = $('input[name="RoomArea"]').val();
+			var startDate = $('input[name="StartDate"]').val();
+			var endDate = $('input[name="EndDate"]').val();
+
+			var formData = {
+				Id: id,
+				StartDate: startDate,
+				EndDate: endDate,
+				RoomArea: roomArea
+			};
+
+			$.ajax({
+				url: 'Save',
+				method: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(formData),
+				success: function (data) {
+					$('#toastBody').text("Успешно!")
+					$(".toast").toast('show')
+
+					setTimeout(() => { location.reload() }, 3500);
+				},
+				error: function (error) {
+					$('#toastBody').text(error.responseText)
+
+					$(".toast").toast('show')
+
+					canSendUpdate = true
+				}
+			});
+		})
+	})
+</script>
+
+<script>
+	function Edit(inputName, caller) {
+		var submitBtn = document.querySelector("#SubmitBtn");
+		var input = document.querySelector("#" + inputName)
+
+		submitBtn.disabled = false
+		input.disabled = false
+		caller.disabled = true
+	}
+</script>
+
+<script>
+	function DeleteMember(Id) {
+		$.ajax({
+			url: 'DeleteMember?Id=' + Id,
+			method: 'POST',
+			contentType: 'application/json',
+			success: function (data) {
+				location.reload();
+			},
+			error: function (error) {
+				$('#toastBody').text(error.responseText)
+
+				$(".toast").toast('show')
+			}
+		});
+	}
+</script>
+
+<script>
+	let canAddMember = true
+
+	$(document).ready(function () {
+		$('#MemberForm').submit(function (event) {
+			event.preventDefault();
+			if (!canAddMember) return
+
+			canAddMember = false
+
+			var id = $('input[name="Id"]').val();
+			var name = $('input[name="Name"]').val();
+			var surename = $('input[name="Surename"]').val();
+			var patronymic = $('input[name="Patronymic"]').val();
+
+			var formData = {
+				Surename: name,
+				Name: surename,
+				Patronymic: patronymic
+			};
+
+			$.ajax({
+				url: 'AddMember?accountId=' + id,
+				method: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(formData),
+				success: function (data) {
+					$('#toastBody').text("Успешно!")
+					$(".toast").toast('show')
+
+					setTimeout(() => { location.reload() }, 1500);
+				},
+				error: function (error) {
+					$('#toastBody').text(error.responseText)
+
+					$(".toast").toast('show')
+
+					canSendUpdate = true
+				}
+			});
+		})
+	})
+</script>
+
+<script>
+	function DeleteAccount() {
+		var id = $('input[name="Id"]').val();
+
+		$.ajax({
+			url: 'DeleteAccount?Id=' + id,
+			method: 'POST',
+			contentType: 'application/json',
+			success: function (data) {
+				location.replace('/')
+			},
+			error: function (error) {
+				$('#toastBody').text(error.responseText)
+				$(".toast").toast('show')
+			}
+		});
+	}
+</script>

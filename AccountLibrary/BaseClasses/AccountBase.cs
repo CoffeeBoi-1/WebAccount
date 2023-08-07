@@ -9,7 +9,7 @@ namespace AccountLibrary.BaseClasses
 {
 	public abstract class AccountBase
 	{
-		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), JsonIgnore]
+		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
 		[Required]
